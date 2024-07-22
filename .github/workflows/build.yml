@@ -1,0 +1,61 @@
+name: Build
+
+on:
+  push:
+    branches:    
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python #安装python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12' 
+    - name: Install
+      run: |
+        pip install pyocd nrfutil intelhex
+    
+    - name: cmake
+      run: |  
+        wget https://github.com/Kitware/CMake/releases/download/v3.30.1/cmake-3.30.1-linux-x86_64.tar.gz
+        tar zxvf cmake-3.30.1-linux-x86_64.tar.gz
+        sudo mv cmake-3.30.1-linux-x86_64.tar.gz /opt/cmake
+        sudo ln -sf /opt/cmake/bin/*  /usr/bin/
+    
+    - name: arm-none-eabi
+      run: |  
+        wget https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz
+        tar -xvf arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz
+        sudo mv arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi /opt/arm-none-eabi
+        sudo ln -sf /opt/arm-none-eabi/bin/*  /usr/bin/
+    
+    - name: nRF5_SDK
+      run: | 
+        wget https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5_SDK_17.1.0_ddde560.zip
+        unzip nRF5_SDK_17.1.0_ddde560.zip
+        cp -r /home/runner/work/canokey-nrf52/canokey-nrf52/nRF5_SDK_17.1.0_ddde560 /home/runner/work/canokey-nrf52/canokey-nrf52/nrf_sdk
+        
+    - name: build
+      run: | 
+        git submodule update --init --recursive
+        mkdir build
+        cd build
+        cmake -DCROSS_COMPILE=/opt/arm-none-eabi/bin/arm-none-eabi- \
+        -DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake \
+        -DCMAKE_BUILD_TYPE=Release ..
+        
+    - name: u2f
+      run: | 
+        cd build
+        make canokey_flash.uf2
+        
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v4
+      with:
+        name: build
+        path: ${{ github.workspace }}/build/
