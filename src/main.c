@@ -51,7 +51,7 @@ static void log_init(void) {
 
 /*------------- MAIN -------------*/
 int main(void) {
-    has_touch = 1;
+    has_touch = 0;
 
     board_init();
     log_init();
