@@ -37,8 +37,8 @@ jobs:
     - name: nRF5_SDK
       run: | 
         wget https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/sdks/nrf5/binaries/nrf5_sdk_17.1.0_ddde560.zip
-        unzip nRF5_SDK_17.1.0_ddde560.zip
-        cp -r /home/runner/work/canokey-nrf52/canokey-nrf52/nRF5_SDK_17.1.0_ddde560 /home/runner/work/canokey-nrf52/canokey-nrf52/nrf_sdk
+        unzip nrf5_sdk_17.1.0_ddde560.zip
+        cp -r /home/runner/work/canokey-nrf52/canokey-nrf52/nrf5_sdk_17.1.0_ddde560 /home/runner/work/canokey-nrf52/canokey-nrf52/nrf_sdk
         
     - name: build
       run: | 
