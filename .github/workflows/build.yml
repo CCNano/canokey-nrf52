@@ -11,27 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up Python #安装python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
-        python-version: '3.13' 
+        python-version: '3.15' 
     - name: Install
       run: |
         pip install pyocd nrfutil intelhex
     
     - name: cmake
       run: |  
-        wget https://github.com/Kitware/CMake/releases/download/v3.31.3/cmake-3.31.3-linux-x86_64.tar.gz
-        tar zxvf cmake-3.31.3-linux-x86_64.tar.gz
-        sudo mv cmake-3.31.3-linux-x86_64.tar.gz /opt/cmake
+        wget https://github.com/Kitware/CMake/releases/download/v4.3.1/cmake-4.3.1-linux-x86_64.tar.gz
+        tar zxvf cmake-4.3.1-linux-x86_64.tar.gz
+        sudo mv cmake-4.3.1-linux-x86_64.tar.gz /opt/cmake
         sudo ln -sf /opt/cmake/bin/*  /usr/bin/
     
     - name: arm-none-eabi
       run: |  
-        wget https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz
-        tar -xvf arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz
-        sudo mv arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi /opt/arm-none-eabi
+        wget https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi.tar.xz
+        tar -xvf arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi.tar.xz
+        sudo mv arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi /opt/arm-none-eabi
         sudo ln -sf /opt/arm-none-eabi/bin/*  /usr/bin/
     
     - name: nRF5_SDK
